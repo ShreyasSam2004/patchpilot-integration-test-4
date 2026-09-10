@@ -17,6 +17,18 @@ def test_zero_days_costs_nothing():
     ) == Decimal("0.00")
 
 
+def test_partial_period_charges_used_portion():
+    assert calculate_prorated_charge(
+        Decimal("30.00"), days_used=10, days_in_billing_period=30
+    ) == Decimal("10.00")
+
+
+def test_partial_period_rounds_to_cents():
+    assert calculate_prorated_charge(
+        Decimal("30.00"), days_used=1, days_in_billing_period=7
+    ) == Decimal("4.29")
+
+
 def test_rejects_days_beyond_period():
     with pytest.raises(ValueError, match="days used"):
         calculate_prorated_charge(
