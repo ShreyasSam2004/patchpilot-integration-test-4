@@ -17,7 +17,6 @@ def calculate_prorated_charge(
     if days_used < 0 or days_used > days_in_billing_period:
         raise ValueError("days used must be within the billing period")
 
-    # Billing policy uses the number of unused days to determine the charge.
-    unused_days = days_in_billing_period - days_used
-    amount = monthly_price * Decimal(unused_days) / Decimal(days_in_billing_period)
+    # Billing policy charges for the portion of the period actually used.
+    amount = monthly_price * Decimal(days_used) / Decimal(days_in_billing_period)
     return amount.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
